@@ -19,4 +19,4 @@ function Invoke-ChocolateyCheck {
 }
 
 # Call the function to check and install Chocolatey
-Check-Chocolatey
+Invoke-ChocolateyCheck

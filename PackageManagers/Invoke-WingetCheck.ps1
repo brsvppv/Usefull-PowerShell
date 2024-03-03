@@ -3,7 +3,7 @@ function Invoke-WingetCheck.ps1 {
     $wingetVersion = (Invoke-Expression "winget -v" -ErrorAction SilentlyContinue)
     if ($wingetVersion) {
         Write-Host "Winget Version $wingetVersion is already installed" -ForegroundColor Green
-        return
+        return  
     }
 
     # Retrieve latest release information from GitHub API
