@@ -14,11 +14,11 @@ $repairOption = (Read-Host Select Repair Method '(1/2/3)')
 if ($repairOption -eq 1) {
     Repair-Volume -DriveLetter $diskVolume -Scan
 }
-if ($repairOption -eq 2) {
+elseif ($repairOption -eq 2) {
     Repair-Volume -DriveLetter $diskVolume -SpotFix
    
 }
-if ($repairOption -eq 3) { 
+elseif ($repairOption -eq 3) { 
     Repair-Volume -DriveLetter $diskVolume -OfflineScanAndFix
 }
 else

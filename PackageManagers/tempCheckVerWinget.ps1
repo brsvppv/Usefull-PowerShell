@@ -10,12 +10,7 @@ $wingetVersion = $wingetVersion.Remove(0, 1)
 $latestVersion = [Version]$latest
 $instVersion = [Version]"$wingetVersion"
 
-if ($latestVersion -eq $instVersion) {
-    Write-Host "Versions are equal"
-} 
-elseif ($latestVersion -lt $instVersion) {
-    Write-Host "$latestVersion is less than $instVersion"
-} 
-else {
-    Write-Host "$latestVersion is greater than $instVersion"
+if ($instVersion -ge $latestVersion) {
+    break
 }
+#perform an upgrade
