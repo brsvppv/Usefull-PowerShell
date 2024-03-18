@@ -1,4 +1,20 @@
 #https://api.github.com/repos/PowerShell/PowerShell/releases/latest
+$IsAdmin = [Security.Principal.WindowsIdentity]::GetCurrent()
+If ((New-Object Security.Principal.WindowsPrincipal $IsAdmin).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator) -eq $FALSE) {
+    # ReLunch With Admin Rights
+    # Create a new process object that starts PowerShell
+    $newProcess = new-object System.Diagnostics.ProcessStartInfo "C:\Program Files\PowerShell\7\pwsh.exe";
+    # Specify the current script path and name as a parameter
+    $newProcess.Arguments = $myInvocation.MyCommand.Definition;
+    # Indicate that the process should be elevated
+    $newProcess.Verb = "runas";
+    #hidden pws
+    #$newProcess.WindowStyle = "Hidden"
+    # Start the new process
+    [System.Diagnostics.Process]::Start($newProcess);
+    # Exit from the current, unelevated, process
+    exit
+}
 Function Install-PwSh7msi {
     $pwsh = (Invoke-Expression "pwsh --version" -ErrorAction SilentlyContinue)
     $downloads_path = (New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path
