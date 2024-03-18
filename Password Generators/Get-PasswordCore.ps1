@@ -1,6 +1,6 @@
 function Get-RandomPassword {
     param (
-        [int]$length = 12  # Set the desired length of the password
+        [int]$length = 16  # Set the desired length of the password
     )
 
     $password = ''

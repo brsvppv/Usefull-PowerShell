@@ -1,3 +1,5 @@
+#Not working for powershell 7
+
 # Load .NET assembly
 Add-Type -AssemblyName System.Web
 

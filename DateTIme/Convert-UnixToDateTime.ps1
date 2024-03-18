@@ -11,6 +11,7 @@ Write-Host $CurrentTime
 # $not_before = (Get-Date 01.01.1970).AddSeconds($not_before)  
 # $expires_in = (Get-Date).AddSeconds($expires_in)
 # $expires_on = (Get-Date).AddSeconds($expires_on)
+
 #Method 2
 $not_before = [DateTimeOffset]::FromUnixTimeSeconds($not_before).DateTime
 $expires_in = [DateTimeOffset]::FromUnixTimeSeconds($expires_in).DateTime
