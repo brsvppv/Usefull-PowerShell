@@ -39,7 +39,7 @@ Function Install-PwSh7msi {
             return 
         }
         Finally {
-            Write-Output "Installation Finished with code:  $exitCode" -ForegroundColor Green
+            Write-Host "Installation Finished with code:  $exitCode" -ForegroundColor Green
             if ($exitCode -eq 0) {
                 Remove-Item $fileName -Force
             }
