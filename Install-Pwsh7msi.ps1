@@ -16,7 +16,7 @@ If ((New-Object Security.Principal.WindowsPrincipal $IsAdmin).IsInRole([Security
     exit
 }
 Function Install-PwSh7msi {
-    $pwsh = (Invoke-Expression "pwsh --version" -ErrorAction SilentlyContinue)
+    $pwsh = (Invoke-Expression "pwsh --version" -ErrorAction SilentlyContinue | Out-null)
     $downloads_path = (New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path
     $latest = Invoke-RestMethod -Uri "https://api.github.com/repos/PowerShell/PowerShell/releases/latest"
     $info_msi = ($latest.assets | Where-Object { $_.name -like "*win-x64.msi" })

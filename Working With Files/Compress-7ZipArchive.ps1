@@ -38,19 +38,6 @@ function Compress-7ZipArchive {
     if ($ZipUp.ExitCode -EQ 0) { Write-Output "Archive has been created successfully" }
     elseif ($ZipUp.ExitCode -ne 0) { Write-Error 'Archive Failed' }
 
-
-
-
-
-    $ZipUp = Start-Process $ZIPPath -ArgumentList $arguments -Wait -PassThru -WindowStyle Normal 
-    if ($ZipUp.ExitCode -EQ 0) { Write-Output "Archive has been created successfully" }
-    elseif ($ZipUp.ExitCode -ne 0) { Write-Error 'Archive Failed' }
-    elseif ($ZipUp.ExitCode -ne 0) { Write-Error 'Archive Failed' }
-
-    $ZipUp = Start-Process $ZIPPath -ArgumentList $arguments -Wait -PassThru -WindowStyle Normal 
-    if ($ZipUp.ExitCode -EQ 0) { Write-Output "Archive has been created successfully" }
-    elseif ($ZipUp.ExitCode -ne 0) { Write-Error 'Archive Failed' }
-
 }
 
 Compress-7ZipArchive -Source 'A:\!TestDirectory\Source' -Destination 'A:\!TestDirectory\Target'  -ArchiveType '7z' -ZIPPath 'C:\Program Files\7-Zip\7z.exe'
