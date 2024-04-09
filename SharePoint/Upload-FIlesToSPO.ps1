@@ -1,4 +1,6 @@
-
+#Reqquires SharePoint Online Client Components SDK DLL Files
+#https://www.microsoft.com/en-us/download/details.aspx?id=42038
+#https://download.microsoft.com/download/B/3/D/B3DA6839-B852-41B3-A9DF-0AFA926242F2/sharepointclientcomponents_16-6906-1200_x64-en-us.msi
 Function Invoke-SPOSliceUpload ($ctx, $libraryName, $fileName, $fileChunkSizeInMB) {
     $fileChunkSizeInMB = 9
     # Each sliced upload requires a unique ID.
@@ -124,8 +126,10 @@ Function New-SPOUpload {
         $SPOnlineUserName,
         [Parameter(Mandatory)]
         $SPOnlineUserKey,
-        $MSCDLL = 'C:\!DO_NOT_DELETE\Microsoft.SharePoint.Client.dll',
-        $MSCRDLL = 'C:\!DO_NOT_DELETE\Microsoft.SharePoint.Client.Runtime.dll'
+        [Parameter(Mandatory)]
+        $MSCDLL,
+        [Parameter(Mandatory)]
+        $MSCRDLL
     )
     Try {
         Add-Type -Path $MSCDLL 
@@ -155,4 +159,6 @@ New-SPOUpload `
     -SPOnlineUserName '' `
     -SPOnlineUserKey '' `
     -SiteURL '' `
-    -LibraryName ''
+    -LibraryName '' `
+    -MSCDLL 'C:\Program Files\Common Files\microsoft shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.dll' `
+    -MSCRDLL 'C:\Program Files\Common Files\microsoft shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.Runtime.dll'
