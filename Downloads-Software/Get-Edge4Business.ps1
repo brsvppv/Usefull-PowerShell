@@ -1,0 +1,1 @@
+https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/f626650a-cf6a-4f73-ab30-3889c621001f/MicrosoftEdgeEnterpriseX64.msi
