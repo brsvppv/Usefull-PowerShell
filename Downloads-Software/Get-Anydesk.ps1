@@ -1,4 +1,4 @@
-Function Get-Anydesk() {
+﻿Function Get-Anydesk() {
     param(
         $url = 'https://download.anydesk.com/AnyDesk.exe',
 
