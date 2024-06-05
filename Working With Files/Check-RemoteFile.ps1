@@ -1,4 +1,6 @@
-$RemoteMachine = "BC365"
+#remote machine name or ip
+$RemoteMachine = "MachineName/IP"
+#filepath
 $FilePath = "C:\Path\To\File.txt"
 # Script block to execute on the remote machine
 $scriptBlock = {
