@@ -5,3 +5,4 @@
         Disable-NetAdapterBinding -InterfaceAlias $adapter.InterfaceAlias -ComponentID ms_tcpip6
     }
 }
+Disable-IPV6

@@ -1,11 +1,18 @@
 
 Function Install-OpenSSH {
-    # Install the OpenSSH Client
-    #Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
-
-    # Install the OpenSSH Server
-    Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
-
+    param(
+        [Parameter(Mandatory, HelpMessage = "Server / Client")]
+        [ValidateSet("Server", "Client")]
+        [String]$Component
+    )
+    switch ($Component) {
+        
+        # Install the OpenSSH Client
+        Client { Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0 }
+        # Install the OpenSSH Server
+        Server { Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0 }
+        Default {  }
+    }
     # Start the sshd service
     Start-Service sshd
 
@@ -21,3 +28,4 @@ Function Install-OpenSSH {
         Write-Output "Firewall rule 'OpenSSH-Server-In-TCP' has been created and exists."
     }
 }
+Install-OpenSSH -Component Server

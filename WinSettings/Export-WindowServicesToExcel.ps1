@@ -27,4 +27,5 @@ Function Export-ServicesToExcel {
     
     }
     $Excel.Quit()
-}Export-ServicesToExcel
+}
+Export-ServicesToExcel

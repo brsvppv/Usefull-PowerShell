@@ -1,4 +1,6 @@
 #https://api.github.com/repos/PowerShell/PowerShell/releases/latest
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 $IsAdmin = [Security.Principal.WindowsIdentity]::GetCurrent()
 If ((New-Object Security.Principal.WindowsPrincipal $IsAdmin).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator) -eq $FALSE) {
     # ReLunch With Admin Rights
@@ -15,7 +17,6 @@ If ((New-Object Security.Principal.WindowsPrincipal $IsAdmin).IsInRole([Security
     # Exit from the current, unelevated, process
     exit
 }
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Function Install-PwSh7msi {
     $pwsh = (Invoke-Expression "pwsh --version" -ErrorAction SilentlyContinue | Out-null)
     $downloads_path = (New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path
