@@ -38,7 +38,7 @@ Function Install-PwSh7msi {
         }
         catch {
             Write-Error $_ | Out-File "$env:TEMP\pwshdownload.log" -Force
-            return 
+            return  
         }
         Finally {
             Write-Host "Installation Finished with code:  $exitCode" -ForegroundColor Green

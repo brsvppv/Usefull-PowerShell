@@ -10,8 +10,7 @@ New-SelfSignedCertificate -Type Custom -Subject "CN=$MachineName" `
     -KeyAlgorithm "RSA" `
     -KeyLength 2048 `
     -HashAlgorithm "SHA256" `
-    -CertStoreLocation "cert:\LocalMachine\My" `
-    -FriendlyName 'Ansible WinRM HTTPs  ' `
+    -CertStoreLocation "Cert:\CurrentUser\My" `
     -NotAfter (Get-Date).AddYears(10)
     
 #-TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.2, 1.3.6.1.5.5.7.3.1", "2.5.29.17={text}upn=$username@localhost") `

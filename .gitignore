@@ -1,3 +1,5 @@
 #Directories 
 localconfig/*
 Tests/*
+Config/*
+Temp/*

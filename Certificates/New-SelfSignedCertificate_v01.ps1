@@ -15,15 +15,15 @@ $years = 3 #(Read-Host Certificate Years)
 
 $params = @{
     Subject            = "CN=$subject, O=$Organization, OU=$OrgUnit, E=$emailSettings, L=$Location, C=$Country"
-    KeyUsage           = @("NonRepudiation", "KeyEncipherment", "DigitalSignature")
+    DnsName            = @("$dnsName1", "$dnsName2", "$dnsName3", "$dnsName4")
     FriendlyName       = $FriendlyName
+    KeyUsage           = @("NonRepudiation", "KeyEncipherment", "DigitalSignature")
     SignatureAlgorithm = $alg
     KeyLength          = 2048
     NotAfter           = (Get-Date).AddYears($years)
     StoreLocation      = 'LocalMachine'
-    IsCA               = $true
     Exportable         = $true
-    #SubjectAlternativeName = @("$dnsName1", "$dnsName2", "$dnsName3", "$dnsName4")
+    TextExtension      = "2.5.29.19={text}CA=true"
 }
 
 New-SelfSignedCertificate  @params

@@ -1,12 +1,14 @@
+#winrm enumerate winrm/config/Listener
+#Get-ChildItem -Path WSMan:\localhost\Listener | Where-Object { $_.Keys -contains "Transport=HTTPS" } | Remove-Item -Recurse -Force
 #$userDesktop = (New-Object -ComObject Shell.Application).NameSpace('shell:Desktop').Self.Path
 #$exportPath = (Read-Host Export Certificate Keys Path)
 
-$userDirectory = 'C:\Temp\'
+$userDirectory = '\\tvbg\root\nf\Shared\!DO_NOT_DELETE!\ADM\Certificates\'
 
 $MachineName = "$($env:COMPUTERNAME).$($env:USERDOMAIN)"
 $Network = Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -eq "Ethernet" }
 
-$exportPath = Join-Path -Path $userDirectory -ChildPath 'Certificate-WinRMs'
+$exportPath = Join-Path -Path $userDirectory -ChildPath 'WinRMs'
 #$MachineName = [System.Net.Dns]::GetHostByName($ENV:COMPUTERNAME).HostName
 
 if (!(Test-Path $exportPath)) { New-Item -Path $exportPath -ItemType Directory }
@@ -19,7 +21,6 @@ if (!(Test-Path $exportPath)) { New-Item -Path $exportPath -ItemType Directory }
 #     -KeyLength 2048 `
 #     -NotAfter (Get-Date).AddYears(10)
 
-    
 $certInfo = New-SelfSignedCertificate -Type Custom -Subject "CN=$MachineName" `
     -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.2, 1.3.6.1.5.5.7.3.1",
     "2.5.29.17={text}dns=$MachineName,&dns=$env:COMPUTERNAME&IPAddress=$($Network.IPAddress)&upn=$env:USERNAME@tvbg") `
@@ -70,9 +71,8 @@ $value_set = @{
 
 New-WSManInstance -ResourceURI "winrm/config/Listener" -SelectorSet $selector_set -ValueSet $value_set
 
-
 $FirewallParam = @{
-    DisplayName = 'Windows Remote Management (HTTPS-In2)'
+    DisplayName = 'Windows Remote Management (HTTPS-In)'
     Direction   = 'Inbound'
     LocalPort   = 5986
     Protocol    = 'TCP'
