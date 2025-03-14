@@ -64,7 +64,7 @@ function Get-ExportPath {
 # Create the Form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'Certificate Generation'
-$form.Size = New-Object System.Drawing.Size(800, 680) # Adjusted size for better layout
+$form.Size = New-Object System.Drawing.Size(800, 600) # Adjusted size for better layout
 $form.FormBorderStyle = 'FixedDialog'
 $form.MaximizeBox = $false
 $form.StartPosition = 'CenterScreen'
@@ -111,8 +111,8 @@ function Add-FormControl {
 }
 
 # Add input fields with reduced spacing
-$textSubject = Add-FormControl -LabelText "Subject Name:" -YPosition 20 -DefaultValue ([System.Net.Dns]::GetHostName()).ToLower()
-$textFriendlyName = Add-FormControl -LabelText "Friendly Name:" -YPosition 60 -DefaultValue $([System.Net.Dns]::GetHostByName($ENV:COMPUTERNAME).HostName).ToLower()
+$textSubject = Add-FormControl -LabelText "Subject Name:" -YPosition 20 -DefaultValue $([System.Net.Dns]::GetHostByName($ENV:COMPUTERNAME).HostName).ToLower()
+$textFriendlyName = Add-FormControl -LabelText "Friendly Name:" -YPosition 60 -DefaultValue ([System.Net.Dns]::GetHostName()).ToLower()
 $textOrganization = Add-FormControl -LabelText "Organization:" -YPosition 100 -DefaultValue "My Organization"
 $textOrgUnit = Add-FormControl -LabelText "Org Unit:" -YPosition 140 -DefaultValue "Department"
 $textEmail = Add-FormControl -LabelText "Email:" -YPosition 180 -DefaultValue "admin@example.com"
@@ -138,22 +138,20 @@ $comboYears.BackColor = [System.Drawing.Color]::FromArgb(250, 250, 250) # Light 
 $comboYears.ForeColor = [System.Drawing.Color]::Black # Black text
 $form.Controls.Add($comboYears)
 
-# Add DNS Name Fields
-$textDNSName1 = Add-FormControl -LabelText "DNS Name 1:" -YPosition 340 -DefaultValue $([System.Net.Dns]::GetHostByName($ENV:COMPUTERNAME).HostName).ToLower()
-$textDNSName2 = Add-FormControl -LabelText "DNS Name 2:" -YPosition 380 -DefaultValue ($env:COMPUTERNAME).ToLower()
-$textDNSName3 = Add-FormControl -LabelText "DNS Name 3:" -YPosition 420 -DefaultValue (Get-WmiObject -Class Win32_NetworkAdapterConfiguration | Where-Object { $_.IPEnabled -eq $true }).IPAddress[0]
+# Add a single textbox for DNS names
+$textDNSNames = Add-FormControl -LabelText "DNS Names (comma-separated):" -YPosition 340 -DefaultValue $([System.Net.Dns]::GetHostByName($ENV:COMPUTERNAME).HostName).ToLower()
 
 # Add ComboBox for Certificate Store Location
 $labelStoreLocation = New-Object System.Windows.Forms.Label
 $labelStoreLocation.Text = 'Certificate Store:'
-$labelStoreLocation.Location = New-Object System.Drawing.Point(20, 460)
+$labelStoreLocation.Location = New-Object System.Drawing.Point(20, 380)
 $labelStoreLocation.Size = New-Object System.Drawing.Size(150, 20)
 $labelStoreLocation.Font = New-Object System.Drawing.Font("Segoe UI", 10)
 $labelStoreLocation.BackColor = [System.Drawing.Color]::Transparent # Make label background transparent
 $form.Controls.Add($labelStoreLocation)
 
 $comboStoreLocation = New-Object System.Windows.Forms.ComboBox
-$comboStoreLocation.Location = New-Object System.Drawing.Point(180, 460)
+$comboStoreLocation.Location = New-Object System.Drawing.Point(180, 380)
 $comboStoreLocation.Size = New-Object System.Drawing.Size(230, 26)
 $comboStoreLocation.DropDownStyle = 'DropDownList'
 $comboStoreLocation.Items.AddRange(@("Cert:\CurrentUser\My", "Cert:\LocalMachine\My", "Cert:\LocalMachine\Root"))
@@ -165,7 +163,7 @@ $form.Controls.Add($comboStoreLocation)
 # Add CheckBox for Export
 $checkBoxExport = New-Object System.Windows.Forms.CheckBox
 $checkBoxExport.Text = "Export Certificate"
-$checkBoxExport.Location = New-Object System.Drawing.Point(20, 500)
+$checkBoxExport.Location = New-Object System.Drawing.Point(20, 420)
 $checkBoxExport.Size = New-Object System.Drawing.Size(150, 20)
 $checkBoxExport.Font = New-Object System.Drawing.Font("Segoe UI", 10)
 $checkBoxExport.BackColor = [System.Drawing.Color]::Transparent # Make checkbox background transparent
@@ -174,7 +172,7 @@ $form.Controls.Add($checkBoxExport)
 # Add a status label
 $statusLabel = New-Object System.Windows.Forms.Label
 $statusLabel.Text = ""
-$statusLabel.Location = New-Object System.Drawing.Point(20, 530)
+$statusLabel.Location = New-Object System.Drawing.Point(20, 430)
 $statusLabel.Size = New-Object System.Drawing.Size(400, 20)
 $statusLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10)
 $statusLabel.BackColor = [System.Drawing.Color]::Transparent # Make label background transparent
@@ -182,17 +180,16 @@ $form.Controls.Add($statusLabel)
 
 # Add a progress bar
 $progressBar = New-Object System.Windows.Forms.ProgressBar
-$progressBar.Location = New-Object System.Drawing.Point(22, 550)
+$progressBar.Location = New-Object System.Drawing.Point(22, 450)
 $progressBar.Size = New-Object System.Drawing.Size(400, 20)
 $progressBar.Style = 'Continuous'
-#[System.Drawing.Color]::FromArgb(250, 250, 250) #
 $progressBar.BackColor = [System.Drawing.Color]::White # Set progress bar background to white
 $form.Controls.Add($progressBar)
 
 # Add a modern Submit Button
 $buttonSubmit = New-Object System.Windows.Forms.Button
 $buttonSubmit.Text = 'Generate Certificate'
-$buttonSubmit.Location = New-Object System.Drawing.Point(20, 580)
+$buttonSubmit.Location = New-Object System.Drawing.Point(20, 480)
 $buttonSubmit.Size = New-Object System.Drawing.Size(400, 40)
 $buttonSubmit.BackColor = [System.Drawing.Color]::FromArgb(0, 123, 255) # Blue color
 $buttonSubmit.ForeColor = [System.Drawing.Color]::White
@@ -431,9 +428,7 @@ $buttonSubmit.Add_Click({
             $Location = $textLocation.Text
             $Country = $textCountry.Text
             $years = $comboYears.SelectedItem
-            $dnsName1 = $textDNSName1.Text
-            $dnsName2 = $textDNSName2.Text
-            $dnsName3 = $textDNSName3.Text
+            $dnsNames = $textDNSNames.Text -split ',' | ForEach-Object { $_.Trim() } # Split and trim DNS names
             $storeLocation = $comboStoreLocation.SelectedItem
 
             Import-Module PKI | Out-Null
@@ -447,7 +442,7 @@ $buttonSubmit.Add_Click({
                 KeyAlgorithm      = "RSA"
                 NotAfter          = (Get-Date).AddYears([int]$years)
                 CertStoreLocation = $storeLocation
-                DnsName           = $dnsName1, $dnsName2, $dnsName3
+                DnsName           = $dnsNames # Use the array of DNS names
                 KeyExportPolicy   = 'Exportable'
             }
 
@@ -473,36 +468,11 @@ $buttonSubmit.Add_Click({
             if ($checkBoxTimestampSigning.Checked) {
                 $ekuExtensions += "1.3.6.1.5.5.7.3.8" # Timestamp Signing
             }
-            # if ($ekuExtensions.Count -eq 0) {
-            #     # Import the PKI module
-                
 
-            #     # Define certificate parameters
-            #     $Params = @{
-            #         Type              = 'Custom'
-            #         Subject           = "CN=$subject, O=$Organization, OU=$OrgUnit, E=$emailSettings, L=$Location, C=$Country"
-            #         FriendlyName      = $FriendlyName
-            #         HashAlgorithm     = "SHA256"
-            #         KeyLength         = 2048
-            #         KeyAlgorithm      = "RSA"
-            #         NotAfter          = (Get-Date).AddYears([int]$years)
-            #         CertStoreLocation = $storeLocation
-            #         DnsName           = $dnsName1, $dnsName2, $dnsName3
-            #         KeyExportPolicy   = 'Exportable'
-            #         KeySpec           = 'KeyExchange'
-            #         Provider          = "Microsoft RSA SChannel Cryptographic Provider"
-            #         #KeyUsage          = 'DigitalSignature', 'KeyEncipherment', 'CertSign' # Key Usage (within limitations)
-            #         TextExtension     = @(
-            #             # Basic Constraints: Subject Type=CA, Path Length Constraint=0
-            #             "2.5.29.19={text}CA=true&PathLength=0" 
-            #         )
-            #     }
-            # }
             # Add Enhanced Key Usage (EKU) extension only if any EKU options are selected
             if ($ekuExtensions.Count -gt 0) {
                 $textExtensions += "2.5.29.37={text}$($ekuExtensions -join ',')" # Enhanced Key Usage
             }
-
 
             # Add Text Extensions to the parameters
             $params.TextExtension = $textExtensions
@@ -591,5 +561,6 @@ $buttonSubmit.Add_Click({
             [System.Windows.Forms.MessageBox]::Show("An error occurred while generating the certificate: $_", "Error", [System.Windows.Forms.MessageBoxButtons]::OK)
         }
     })
+
 # Show the form
 $form.ShowDialog() | Out-Null

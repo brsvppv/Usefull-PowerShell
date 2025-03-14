@@ -3,13 +3,12 @@
         [string]$DevOpsServer,
         [string]$Collection,
         [string]$Project,
-        [string]$DestinationPath
+        [string]$DestinationPath = $(Join-Path -Path $($env:HOMEDRIVE) -ChildPath "\DevOps\$Collection\$Project")
     )
 
     if (!(Test-Path -Path $DestinationPath)) {
         New-Item -ItemType Directory -Path $DestinationPath | Out-Null
     }
-
     $uri = "$DevOpsServer/$Collection/$Project/_apis/git/repositories?api-version=6.0"
     $response = Invoke-RestMethod -Uri $uri -UseDefaultCredentials -Method Get
 
@@ -42,7 +41,7 @@ $Server = "https://devops.tvbg/"
 $Collection = "YouCollection" #
 #SET PROJECT 
 $Project = "YourProject"
-#SET PATH - IF YOU WANT SPECIFIC PATH CHANGE EXAMPLE C:\PROJECTS"
-$Path = Join-Path -Path "C:\DevOps" -ChildPath "$($Collection)\$($Project)"
+#SET PATH - IF PATH PARAM IS NOT PROVIDED WILL BE SEVED TO HOMEDRIVE\DEVOPS\COLLECTION\PROJECT\
+#$Path = Join-Path -Path "C:\DevOps\YourCollection\YourProject\
 # Example usage
-Get-DevOpsRepositories -DevOpsServer $Server -Collection $Collection -Project $Project -DestinationPath  $Path
+Get-DevOpsRepositories -DevOpsServer $Server -Collection $Collection -Project $Project 
