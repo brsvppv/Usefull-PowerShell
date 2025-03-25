@@ -1,7 +1,7 @@
 # Import the PKI module
 Import-Module PKI -Verbose
 #Define certificate parameters
-$CertificateName = 'teamvisionbulgaria.onmicrosoft.com'
+$CertificateName = $MachineName
 $OU = 'Team-VISION Bulgaria Ltd'
 $ORG = 'Team-VISION Bulgaria Ltd'
 $Country = 'BG'
@@ -19,7 +19,7 @@ $certParams = @{
     CertStoreLocation = "Cert:\LocalMachine\My"
     Provider          = "Microsoft RSA SChannel Cryptographic Provider"
     KeySpec           = 'KeyExchange'
-    KeyUsage          = 'DigitalSignature', 'KeyEncipherment', 'CertSign' # Key Usage (within limitations)
+    KeyUsage          = 'DigitalSignature', 'KeyEncipherment', 'DataEncipherment', 'CertSign' # Key Usage (within limitations)
     HashAlgorithm     = "SHA256"
     KeyAlgorithm      = "RSA"
     KeyLength         = 2048

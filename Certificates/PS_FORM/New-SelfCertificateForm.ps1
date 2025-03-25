@@ -163,7 +163,7 @@ $form.Controls.Add($comboStoreLocation)
 # Add CheckBox for Export
 $checkBoxExport = New-Object System.Windows.Forms.CheckBox
 $checkBoxExport.Text = "Export Certificate"
-$checkBoxExport.Location = New-Object System.Drawing.Point(20, 420)
+$checkBoxExport.Location = New-Object System.Drawing.Point(20, 410)
 $checkBoxExport.Size = New-Object System.Drawing.Size(150, 20)
 $checkBoxExport.Font = New-Object System.Drawing.Font("Segoe UI", 10)
 $checkBoxExport.BackColor = [System.Drawing.Color]::Transparent # Make checkbox background transparent
