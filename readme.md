@@ -28,7 +28,7 @@ This repository contains a wide range of PowerShell scripts and functions coveri
 | `CountryCallingCode`   | Scripts related to country calling codes      |
 | `CreateService`        | Service creation helper scripts                |
 | `Credentials`          | Credential handling scripts                     |
-| `DateTime`             | Functions like `Get-RandomPassword`             |
+| `DateTime`             | Functions like `DateTime-related functions`             |
 | `DevOps`               | DevOps-related automation                       |
 | `DevicesInfo`          | Device and system info collection scripts      |
 | `Downloads-Software`   | Scripts for software downloads                   |
