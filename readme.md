@@ -22,27 +22,27 @@ This repository contains a wide range of PowerShell scripts and functions coveri
 
 ## 📂 Repository Structure
 
-| Folder / File           | Description                                   | Last Update     |
-|------------------------|-----------------------------------------------|-----------------|
-| `Certificates`         | Scripts to manage certificates and forms      | 3-4 months ago  |
-| `CountryCallingCode`   | Scripts related to country calling codes      | 4 months ago    |
-| `CreateService`        | Service creation helper scripts                | 1 year ago      |
-| `Credentials`          | Credential handling scripts                     | 3-4 months ago  |
-| `DateTime`             | Functions like `Get-RandomPassword`             | 1 year ago      |
-| `DevOps`               | DevOps-related automation                       | 3 months ago    |
-| `DevicesInfo`          | Device and system info collection scripts      | 1 year ago      |
-| `Downloads-Software`   | Scripts for software downloads                   | 1 year ago      |
-| `Encryption`           | Key and hash functions                           | 1 year ago      |
-| `Mail Notification`    | Email notification scripts                       | 1 year ago      |
-| `Monitor Directory`    | Directory monitoring functions                   | 1 year ago      |
-| `PackageManagers`      | Scripts for managing package installations      | 1 year ago      |
-| `Password Generators`  | Password generation utilities                    | 1 year ago      |
-| `SQL`                  | SQL automation scripts                           | 4 months ago   |
-| `SharePoint`           | SharePoint upload and management                 | 1 year ago      |
-| `Tableau/Server`       | Tableau server related scripts                    | 1 year ago      |
-| `ValidateParams`       | Parameter validation helper functions            | 1 year ago      |
-| `WinSettings`          | Windows settings management                       | 3 months ago    |
-| `Working With Files`   | File handling and manipulation scripts           | 4 months ago    |
+| Folder / File           | Description                                   |
+|------------------------|-----------------------------------------------|
+| `Certificates`         | Scripts to manage certificates and forms      |
+| `CountryCallingCode`   | Scripts related to country calling codes      |
+| `CreateService`        | Service creation helper scripts                |
+| `Credentials`          | Credential handling scripts                     |
+| `DateTime`             | Functions like `Get-RandomPassword`             |
+| `DevOps`               | DevOps-related automation                       |
+| `DevicesInfo`          | Device and system info collection scripts      |
+| `Downloads-Software`   | Scripts for software downloads                   |
+| `Encryption`           | Key and hash functions                           |
+| `Mail Notification`    | Email notification scripts                       |
+| `Monitor Directory`    | Directory monitoring functions                   |
+| `PackageManagers`      | Scripts for managing package installations      |
+| `Password Generators`  | Password generation utilities                    |
+| `SQL`                  | SQL automation scripts                           |
+| `SharePoint`           | SharePoint upload and management                 |
+| `Tableau/Server`       | Tableau server related scripts                    |
+| `ValidateParams`       | Parameter validation helper functions            |
+| `WinSettings`          | Windows settings management                       |
+| `Working With Files`   | File handling and manipulation scripts           |
 
 ---
 
