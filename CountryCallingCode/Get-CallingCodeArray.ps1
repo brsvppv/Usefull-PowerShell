@@ -6,7 +6,7 @@ function Get-CallingCode {
 
     try {
         # Fetch all countries from the API
-        $countries = Invoke-RestMethod -Uri "https://restcountries.com/v3.1/all"
+        $countries = Invoke-RestMethod -Uri "https://restcountries.com/v3.1/all?fields=cca2,cca3,idd"
 
         # Filter the country by its country code (cca2 or cca3)
         $country = $countries | Where-Object {

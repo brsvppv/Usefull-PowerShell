@@ -4,7 +4,7 @@ function Get-CallingCodes {
     )
 
     # Fetch all countries from the API
-    $countries = Invoke-RestMethod -Uri "https://restcountries.com/v3.1/all"
+    $countries = Invoke-RestMethod -Uri "https://restcountries.com/v3.1/all?fields=cca2,cca3,idd"
 
     # Filter the country by its country code (cca2 or cca3)
     $country = $countries | Where-Object { $_.cca2 -eq $CountryCode -or $_.cca3 -eq $CountryCode }
@@ -22,5 +22,5 @@ function Get-CallingCodes {
 }
 
 # Example usage
-Get-CallingCodes -CountryCode "GB"  # United Kingdom
+Get-CallingCodes -CountryCode "BG"  # United Kingdom
 
