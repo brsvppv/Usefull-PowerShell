@@ -6,7 +6,7 @@ if (!(Test-Path $exportPath)) { New-Item -Path $exportPath -ItemType Directory }
 $certInfo = New-SelfSignedCertificate -Type Custom -Subject "CN=$MachineName" `
     -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.2, 1.3.6.1.5.5.7.3.1",
     "2.5.29.17={text}dns=$MachineName,&dns=$env:COMPUTERNAME&IPAddress=$($Network.IPAddress)&upn=$env:USERNAME@tvbg") `
-    -FriendlyName 'Ansible WinRMs HTTPs' `
+    -FriendlyName 'Certificate FriendlyName' `
     -KeySpec 'KeyExchange' `
     -Provider "Microsoft RSA SChannel Cryptographic Provider" `
     -KeyUsage "NonRepudiation", "KeyEncipherment", "DigitalSignature" `

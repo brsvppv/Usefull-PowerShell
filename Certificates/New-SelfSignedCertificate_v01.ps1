@@ -1,4 +1,4 @@
-$subject = "Team VISION - Bulgaria Ltd" #(Read-Host Subhect Name)
+$CertificateName = "Team VISION - Bulgaria Ltd" #(Read-Host Subhect Name)
 $FriendlyName = 'TeamVISIONBulgaria.onmicrosoft.com'
 $Organization = "Team VISION - Bulgaria Ltd." #(Read-Host Organization Name)
 $OrgUnit = "Team VISION - Bulgaria Ltd." #(Read-Host Organizational Unit)
@@ -14,7 +14,7 @@ $dnsName4 = "DNS4" #(Read-Host Alternative Name 4)
 $years = 3 #(Read-Host Certificate Years)
 
 $params = @{
-    Subject            = "CN=$subject, O=$Organization, OU=$OrgUnit, E=$emailSettings, L=$Location, C=$Country"
+    Subject            = "CN=$CertificateName, O=$Organization, OU=$OrgUnit, E=$emailSettings, L=$Location, C=$Country"
     DnsName            = @("$dnsName1", "$dnsName2", "$dnsName3", "$dnsName4")
     FriendlyName       = $FriendlyName
     KeyUsage           = @("NonRepudiation", "KeyEncipherment", "DigitalSignature")

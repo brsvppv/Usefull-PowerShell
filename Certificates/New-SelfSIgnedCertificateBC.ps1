@@ -1,18 +1,18 @@
-$subject = "$($env:COMPUTERNAME).$($env:USERDOMAIN)" #(Read-Host Subhect Name)
+$CertificateName = "$($env:COMPUTERNAME).$($env:USERDOMAIN)" #(Read-Host Subhect Name)
 $FriendlyName = $($env:COMPUTERNAME)
-$Organization = "Team VISION - Bulgaria Ltd." #(Read-Host Organization Name)
-$OrgUnit = "Team VISION - Bulgaria Ltd." #(Read-Host Organizational Unit)
-$emailSettings = "office@team-vision.bg"#(Read-Host Email:)
-$Location = "SF" #(Read-Host Location)
+$Organization = (Read-Host Organization Name)
+$OrgUnit = (Read-Host Organizational Unit)
+$emailSettings = (Read-Host Email:)
+$Location = (Read-Host Location (ex. Sofia, Berlin, London,  New York))
 #$State = #(Read-Host State)
-$Country = "BG" #(Read-Host Country/BG/EN/US/)
+$Country = (Read-Host Country/BG/EN/US/)
 $alg = "SHA256" #(Read-Host SHA Algorythm)
 $dnsName1 = $($env:COMPUTERNAME)
 $dnsName2 = "$($env:COMPUTERNAME).$($env:USERDOMAIN)"
-$years = 3 #(Read-Host Certificate Years)
+[int]$years = (Read-Host Certificate Years)
 
 $params = @{
-    Subject           = "CN=$subject, O=$Organization, OU=$OrgUnit, E=$emailSettings, L=$Location, C=$Country"
+    Subject           = "CN=$CertificateName, O=$Organization, OU=$OrgUnit, E=$emailSettings, L=$Location, C=$Country"
     KeyUsage          = @("NonRepudiation", "KeyEncipherment", "DigitalSignature")
     FriendlyName      = $FriendlyName
     HashAlgorithm     = $alg
@@ -22,8 +22,7 @@ $params = @{
     CertStoreLocation = 'cert:\LocalMachine\My'
     DnsName           = $dnsName1, $dnsName2
     KeyExportPolicy   = 'Exportable'
-    TextExtension     = ("2.5.29.19={text}CA=true")
-
+    TextExtension     = ("2.5.29.19={text}CA=true") # Use CA=false for end-entity/server certs
     #SubjectAlternativeName = @("$dnsName1", "$dnsName2", "$dnsName3", "$dnsName4")
 }
 
