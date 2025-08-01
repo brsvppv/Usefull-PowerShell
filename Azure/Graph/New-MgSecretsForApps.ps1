@@ -1,20 +1,20 @@
 function New-MgSecretsForApps {
 <#
-.SYNOPSIS
-Creates new secrets for all Azure AD applications with a specified prefix and exports the details to a CSV file.
+    .SYNOPSIS
+    Creates new secrets for all Azure AD applications with a specified prefix and exports the details to a CSV file.
 
-.DESCRIPTION
-Requires the Microsoft Graph PowerShell module (`Microsoft.Graph`). 
-Connects to Microsoft Graph, finds all applications whose DisplayName starts with the given prefix, creates a new secret for each, and exports the secret details.
+    .DESCRIPTION
+    Requires the Microsoft Graph PowerShell module (`Microsoft.Graph`). 
+    Connects to Microsoft Graph, finds all applications whose DisplayName starts with the given prefix, creates a new secret for each, and exports the secret details.
 
-.PARAMETER Prefix
-The prefix to filter application DisplayNames (default: "tv_").
+    .PARAMETER Prefix
+    The prefix to filter application DisplayNames (default: "tv_").
 
-.PARAMETER Years
-Number of years the secret will be valid (default: 1).
+    .PARAMETER Years
+    Number of years the secret will be valid (default: 1).
 
-.PARAMETER OutputCsv
-Path to the output CSV file (default: C:\Temp\AppSecrets.csv).
+    .PARAMETER OutputCsv
+    Path to the output CSV file (default: C:\Temp\AppSecrets.csv).
 #>
     [CmdletBinding()]
     param (

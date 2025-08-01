@@ -1,21 +1,21 @@
 ﻿function Export-MgExistingAppSecrets {
 <#
-.SYNOPSIS
-Exports existing secrets for all Azure AD applications, optionally filtered by prefix, to a CSV file.
+    .SYNOPSIS
+    Exports existing secrets for all Azure AD applications, optionally filtered by prefix, to a CSV file.
 
-.DESCRIPTION
-Requires the Microsoft Graph PowerShell module (`Microsoft.Graph`). 
-Connects to Microsoft Graph, finds all applications (optionally filtered by DisplayName prefix), and exports their existing secrets (PasswordCredentials) to a CSV file.
+    .DESCRIPTION
+    Requires the Microsoft Graph PowerShell module (`Microsoft.Graph`). 
+    Connects to Microsoft Graph, finds all applications (optionally filtered by DisplayName prefix), and exports their existing secrets (PasswordCredentials) to a CSV file.
 
-.PARAMETER Prefix
-(Optional) The prefix to filter application DisplayNames. If not specified, exports secrets for all applications.
+    .PARAMETER Prefix
+    (Optional) The prefix to filter application DisplayNames. If not specified, exports secrets for all applications.
 
-.PARAMETER OutputCsv
-Path to the output CSV file (default: $env:USERPROFILE\ExistingAppSecrets.csv).
+    .PARAMETER OutputCsv
+    Path to the output CSV file (default: $env:USERPROFILE\ExistingAppSecrets.csv).
 
-.EXAMPLE
-Export-MgExistingAppSecrets -Prefix "myapp_" -OutputCsv "C:\Temp\ExistingAppSecrets.csv"
-Export-MgExistingAppSecrets -OutputCsv "C:\Temp\AllAppSecrets.csv"
+    .EXAMPLE
+    Export-MgExistingAppSecrets -Prefix "myapp_" -OutputCsv "C:\Temp\ExistingAppSecrets.csv"
+    Export-MgExistingAppSecrets -OutputCsv "C:\Temp\AllAppSecrets.csv"
 #>
     [CmdletBinding()]
     param (

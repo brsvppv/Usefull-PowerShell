@@ -1,21 +1,21 @@
 ﻿function Export-MgExistingApps {
 <#
-.SYNOPSIS
-Exports Azure AD applications, optionally filtered by prefix, to a CSV file.
+    .SYNOPSIS
+    Exports Azure AD applications, optionally filtered by prefix, to a CSV file.
 
-.DESCRIPTION
-Requires the Microsoft Graph PowerShell module (`Microsoft.Graph`). 
-Connects to Microsoft Graph, finds all applications (optionally filtered by DisplayName prefix), and exports their basic details to a CSV file.
+    .DESCRIPTION
+    Requires the Microsoft Graph PowerShell module (`Microsoft.Graph`). 
+    Connects to Microsoft Graph, finds all applications (optionally filtered by DisplayName prefix), and exports their basic details to a CSV file.
 
-.PARAMETER Prefix
-(Optional) The prefix to filter application DisplayNames. If not specified, exports all applications.
+    .PARAMETER Prefix
+    (Optional) The prefix to filter application DisplayNames. If not specified, exports all applications.
 
-.PARAMETER OutputCsv
-Path to the output CSV file (default: $env:USERPROFILE\ExistingApps.csv).
+    .PARAMETER OutputCsv
+    Path to the output CSV file (default: $env:USERPROFILE\ExistingApps.csv).
 
-.EXAMPLE
-Export-MgExistingApps -Prefix "myapp_" -OutputCsv "C:\Temp\ExistingApps.csv"
-Export-MgExistingApps -OutputCsv "C:\Temp\AllApps.csv"
+    .EXAMPLE
+    Export-MgExistingApps -Prefix "myapp_" -OutputCsv "C:\Temp\ExistingApps.csv"
+    Export-MgExistingApps -OutputCsv "C:\Temp\AllApps.csv"
 #>
     [CmdletBinding()]
     param (

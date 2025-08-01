@@ -35,7 +35,7 @@ function Get-CallingCode {
 }
 
 # Example usage:
-$countryCode = "USA"
+$countryCode = "BG"
 $callingCodes = Get-CallingCode -CountryCode $countryCode
 
 if ($callingCodes) {

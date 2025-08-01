@@ -1,22 +1,22 @@
+function New-MgAppSecret {
 <#
-.SYNOPSIS
-Creates a new Azure AD application secret and exports the details to a CSV file.
+    .SYNOPSIS
+    Creates a new Azure AD application secret and exports the details to a CSV file.
 
-.DESCRIPTION
-This script requires the Microsoft Graph PowerShell module (`Microsoft.Graph`) to be installed and imported.
-You can install it using: Install-Module Microsoft.Graph -Scope CurrentUser
+    .DESCRIPTION
+    This script requires the Microsoft Graph PowerShell module (`Microsoft.Graph`) to be installed and imported.
+    You can install it using: Install-Module Microsoft.Graph -Scope CurrentUser
 
-.PARAMETER AppObjectId
-The ObjectId of the Azure AD Application.
+    .PARAMETER AppObjectId
+    The ObjectId of the Azure AD Application.
 
-.PARAMETER Years
-Number of years the secret will be valid.
+    .PARAMETER Years
+    Number of years the secret will be valid.
 
-.PARAMETER OutputCsv
-Output CSV file path for storing the secret details (default: .\AppSecrets.csv).
+    .PARAMETER OutputCsv
+    Output CSV file path for storing the secret details (default: .\AppSecrets.csv).
 #>
 
-function New-MgAppSecret {
     [CmdletBinding()]
     param (
         # The ObjectId of the Azure AD Application

@@ -125,7 +125,7 @@ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             <Label Name="LBL_CurrTime" Content="" HorizontalAlignment="Left" Margin="5,0,353,8" VerticalAlignment="Bottom"/>
             <Label Name="LBL_DirPath" Content="Directory To Monitor" Margin="105,0,353,8" VerticalAlignment="Bottom"/>
             
-          <  <TextBox Name="TXT_DirPath" Text="Select Directory To Monitor" Height="20" Margin="295,0,34,9" VerticalAlignment="Bottom" FontSize="11" IsReadOnly="true"/>
+            <TextBox Name="TXT_DirPath" Text="Select Directory To Monitor" Height="20" Margin="295,0,34,9" VerticalAlignment="Bottom" FontSize="11" IsReadOnly="true"/>
             <CheckBox Name="CHB_MailNotify" HorizontalAlignment="Left" Style="{DynamicResource OrangeSwitchStyle}" Margin="5,200,0,0" Height="21" VerticalAlignment="Top" Width="94" />
             <CheckBox Name="CHB_LogFile" HorizontalAlignment="Left" Style="{DynamicResource OrangeSwitchStyle}" Margin="5,250,0,0" Height="21" VerticalAlignment="Top" Width="94" />
             <CheckBox Name="chk_Rbutton3" HorizontalAlignment="Left" Style="{DynamicResource OrangeSwitchStyle}" Margin="5,300,0,0" Height="21" VerticalAlignment="Top" Width="94" />
@@ -135,26 +135,23 @@ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 
             </Grid>
     </Window>
-    
-    
 "@
-# <TextBlock Name="textBlock" HorizontalAlignment="Left"  Margin="105,2,2,35" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="415" Width="446"/>
 
-#Read XAML
-$reader = (New-Object System.Xml.XmlNodeReader $xaml) 
-try { $DirectoryMonitor = [Windows.Markup.XamlReader]::Load( $reader ) }
+# Read XAML
+$reader = New-Object System.Xml.XmlNodeReader $XAML.DocumentElement
+try { $DirectoryMonitor = [Windows.Markup.XamlReader]::Load($reader) }
 catch { Write-Host "Unable to load Windows.Markup.XamlReader"; exit }
+
 # Store Form Objects In PowerShell
-$xaml.SelectNodes("//*[@Name]") | ForEach-Object { Set-Variable -Name ($_.Name) -Value $DirectoryMonitor.FindName($_.Name) }
+$XAML.SelectNodes("//*[@Name]") | ForEach-Object { Set-Variable -Name ($_.Name) -Value $DirectoryMonitor.FindName($_.Name) }
 $timer = New-Object System.Windows.Forms.Timer
 
 $timer_Tick = {
-    $LBL_CurrTime.Content = "$([string]::Format("{0:d2}:{1:d2}:{2:d2}",$((Get-Date).Hour),$((Get-Date).Minute),$((Get-Date).Second)))"
-
+    $LBL_CurrTime.Content = "$([string]::Format("{0:d2}:{1:d2}:{2:d2}", (Get-Date).Hour, (Get-Date).Minute, (Get-Date).Second))"
 }
 
 $timer.Enabled = $True
-$timer.Interval = 1
+$timer.Interval = 1000
 $timer.add_Tick($timer_Tick)
 
 $OFS = "`r`n"
@@ -163,51 +160,48 @@ $DirMonName = "DirectoryMonitor"
 $MonitorLog = "DirMonHistory.log"
 $DirMonFullPath = Join-Path $LogFilePath -ChildPath $DirMonName 
 $LogFilePath = Join-Path $DirMonFullPath -ChildPath $MonitorLog
-$LogStartDate = Get-Date -UForma "%d.%m.%Y"
-$LogStartTime = Get-Date -UForma "%H:%M"
-$HeaderLog = 'Directory Monitoring Path' + $TXT_DirPath.Text + ' Creation Date: ' + $LogStartDate + ';' + $LogStartTime
-$ChangeTypes = [System.IO.WatcherChangeTypes]::Created, [System.IO.WatcherChangeTypes]::Deleted,[System.IO.WatcherChangeTypes]::Renamed,[System.IO.WatcherChangeTypes]::Deleted
+$LogStartDate = Get-Date -UFormat "%d.%m.%Y"
+$LogStartTime = Get-Date -UFormat "%H:%M"
+$HeaderLog = 'Directory Monitoring Path ' + $TXT_DirPath.Text + ' Creation Date: ' + $LogStartDate + ';' + $LogStartTime
+$ChangeTypes = [System.IO.WatcherChangeTypes]::Created, [System.IO.WatcherChangeTypes]::Deleted, [System.IO.WatcherChangeTypes]::Renamed, [System.IO.WatcherChangeTypes]::Deleted
 
-$DirectoryMonitor.Add_Loaded( {
-        DisableCHB
-        VerifyDirectory
-    })
+$DirectoryMonitor.Add_Loaded({
+    DisableCHB
+    VerifyDirectory
+})
+
 Function CreateLog {
     if (!(Test-Path "$DirMonFullPath")) {
-        New-Item -Path "$DirMonFullPath" -ItemType Directory -Force 
-        New-Item -ItemType File -Path $DirMonFullPath -Name $MonitorLog -Value $HeaderLog
+        New-Item -Path "$DirMonFullPath" -ItemType Directory -Force | Out-Null
+        New-Item -ItemType File -Path $DirMonFullPath -Name $MonitorLog -Value $HeaderLog | Out-Null
     }
     else {
         $BoolVerifyLog = [System.IO.File]::Exists("$DirMonFullPath\$MonitorLog")
-        
         if ($BoolVerifyLog -eq $false) {
-
-            New-Item -ItemType File -Path $DirMonFullPath -Name $MonitorLog -Value $HeaderLog
-
+            New-Item -ItemType File -Path $DirMonFullPath -Name $MonitorLog -Value $HeaderLog | Out-Null
         }
         else {
             $File = "$DirMonFullPath\$MonitorLog"
-            $SetDate = Get-Date -UForma "%y%m%dT%H%M%S"
-            write-host $File $SetDate
+            $SetDate = Get-Date -UFormat "%y%m%dT%H%M%S"
+            Write-Host $File $SetDate
             Rename-Item -Path $File -NewName "$DirMonFullPath\$SetDate-$MonitorLog"
-            New-Item -ItemType File -Path $DirMonFullPath -Name $MonitorLog -Value $HeaderLog
+            New-Item -ItemType File -Path $DirMonFullPath -Name $MonitorLog -Value $HeaderLog | Out-Null
         }
-    }   
+    }
 }
-#FORCE TO SELECT DIRECTORY    
+
 Function VerifyDirectory {
     $BoolVerifyDirectory = [System.IO.Directory]::Exists($TXT_DirPath.Text)
     if ($BoolVerifyDirectory -eq $false) {
-        [System.Windows.MessageBox]::Show("You Meed To Select Target Directory To Monitor", 'Warning', 'OK', 'Information')
+        [System.Windows.MessageBox]::Show("You Need To Select Target Directory To Monitor", 'Warning', 'OK', 'Information')
         SelectDirectory
     }
     else {
-        [System.Windows.MessageBox]::Show("Target Directory Loaded Succesfully", 'Info', 'OK', 'Information')
+        [System.Windows.MessageBox]::Show("Target Directory Loaded Successfully", 'Info', 'OK', 'Information')
     }
 }
-#DISABLE CHECKBOXES FUNCTION FOR REGISTERING EVENTS
-Function DisableCHB {
 
+Function DisableCHB {
     $CHB_Created.IsEnabled = $false
     $CHB_Created.Foreground = "Gray"
     $CHB_Deleted.IsEnabled = $false
@@ -216,14 +210,9 @@ Function DisableCHB {
     $CHB_Changed.Foreground = "Gray"
     $CHB_Renamed.IsEnabled = $false
     $CHB_Renamed.Foreground = "Gray"
-    # $CHB_Disposed.IsEnabled = $false
-    # $CHB_Disposed.Foreground = "Gray"
-    # $CHB_Error.IsEnabled = $false
-    # $CHB_Error.Foreground = "Gray"
 }
-#ENABLE CHECKBOXES FUNCTION FOR REGISTERING EVENTS
+
 Function EnableCHB {
-    
     $CHB_Created.IsEnabled = $true
     $CHB_Created.Foreground = "Green"
     $CHB_Deleted.IsEnabled = $true
@@ -232,12 +221,8 @@ Function EnableCHB {
     $CHB_Changed.Foreground = "Green"
     $CHB_Renamed.IsEnabled = $true
     $CHB_Renamed.Foreground = "Green"
-    # $CHB_Disposed.IsEnabled = $true
-    # $CHB_Disposed.Foreground = "Green"
-    # $CHB_Error.IsEnabled = $true
-    # $CHB_Error.Foreground = "Green"
 }
-#ENABLE FILE WATCHER FUNCTION
+
 $FileSystemWatcher = New-Object System.IO.FileSystemWatcher 
 $FileSystemWatcher.Path = "C:\"
 $FileSystemWatcher.Filter = "*.*"
@@ -246,183 +231,116 @@ $FileSystemWatcher.EnableRaisingEvents = $true
 $FileSystemWatcher.NotifyFilter = [System.IO.WatcherChangeTypes]::Created, [System.IO.WatcherChangeTypes]::Deleted
 
 $ActionOnCreate = {
-        $FullPath = $Event.SourceEventArgs.FullPath
-        $changeType = $Event.SourceEventArgs.ChangeType
-        $Name = $Event.SourceEventArgs.Name
-        $TimeStamp = $Event.TimeGenerated
-
-        $Object = "File $Name was $changeType in $FullPath at $TimeStamp"
-
-        $ListBox_Monitor.Items.Add($Object)
-
-        Add-Content $DirMonFullPath\$MonitorLog "$OFS $Object" -Force  
-        
+    $FullPath = $Event.SourceEventArgs.FullPath
+    $changeType = $Event.SourceEventArgs.ChangeType
+    $Name = $Event.SourceEventArgs.Name
+    $TimeStamp = $Event.TimeGenerated
+    $Object = "File $Name was $changeType in $FullPath at $TimeStamp"
+    $ListBox_Monitor.Items.Add($Object)
+    Add-Content $DirMonFullPath\$MonitorLog "$OFS $Object" -Force  
 }
 $ActionOnChange = { 
-#            
-        $FullPath = $Event.SourceEventArgs.FullPath
-        $changeType = $Event.SourceEventArgs.ChangeType
-        $Name = $Event.SourceEventArgs.Name
-        $LastWrite =  $Event.SourceEventArgs.LastWrite
-        $TimeStamp = $Event.TimeGenerated
-        #$Object = "The file $Name was $changeType at $Event.TimeGenerated Filepath: $FullPath" 
-        $Object = "File $Name was $changeType at $TimeStamp, Location: $FullPath, Previous Location: $LastWrite"
-
-        $ListBox_Monitor.Items.Add($Object)
-
-        Add-Content $DirMonFullPath\$MonitorLog "$OFS $Object" -Force  
-        
+    $FullPath = $Event.SourceEventArgs.FullPath
+    $changeType = $Event.SourceEventArgs.ChangeType
+    $Name = $Event.SourceEventArgs.Name
+    $LastWrite =  $Event.SourceEventArgs.LastWrite
+    $TimeStamp = $Event.TimeGenerated
+    $Object = "File $Name was $changeType at $TimeStamp, Location: $FullPath, Previous Location: $LastWrite"
+    $ListBox_Monitor.Items.Add($Object)
+    Add-Content $DirMonFullPath\$MonitorLog "$OFS $Object" -Force  
 }
 $ActionOnRename = {
-
     $FullPath = $Event.SourceEventArgs.FullPath
     $changeType = $Event.SourceEventArgs.ChangeType
     $OldName = $Event.SourceEventArgs.OldName
     $Name = $Event.SourceEventArgs.Name
     $TimeStamp = $Event.TimeGenerated
-    #$Object = "The file $Name was $changeType at $Event.TimeGenerated Filepath: $FullPath" 
     $Object = "File $OldName has been $changeType to $Name at $TimeStamp, Location: $FullPath"
     $ListBox_Monitor.Items.Add($Object)
     Add-Content $DirMonFullPath\$MonitorLog "$OFS $Object" -Force  
-    
 }
 $ActionOnDelete = {
-
     $FullPath = $Event.SourceEventArgs.FullPath
     $changeType = $Event.SourceEventArgs.ChangeType
     $Name = $Event.SourceEventArgs.Name
-    #$LastWrite = $Event.SourceEventArgs.LastWrite
     $TimeStamp = $Event.TimeGenerated
-    #$Object = "The file $Name was $changeType at $Event.TimeGenerated Filepath: $FullPath" 
     $Object = "File $Name has been $changeType from Location: $FullPath at $TimeStamp" 
     $ListBox_Monitor.Items.Add($Object)
     Add-Content $DirMonFullPath\$MonitorLog "$OFS $Object" -Force  
-    
 }
-#SELECT DIRECTORY FUNCTION
+
 function SelectDirectory {
     $browse = New-Object System.Windows.Forms.FolderBrowserDialog
     $browse.SelectedPath = "C:\"
     $browse.ShowNewFolderButton = $true
     $browse.Description = "Select a directory"
-
     $loop = $true
     while ($loop) {
         if ($browse.ShowDialog() -eq "OK") {
             $loop = $false
-		
-            $browse.SelectedPath
             $TXT_DirPath.Text = $browse.SelectedPath
             $browse.Dispose()
-		
         }
         else {
-            $res = [System.Windows.Forms.MessageBox]::Show("No Directroy Selected. Try Again?", "Select a location", [System.Windows.Forms.MessageBoxButtons]::YesNo)
+            $res = [System.Windows.Forms.MessageBox]::Show("No Directory Selected. Try Again?", "Select a location", [System.Windows.Forms.MessageBoxButtons]::YesNo)
             if ($res -eq "No") {
-                #####
                 return
             }
         }
     }
 }
-#BUTTON SELECT DIRECTORY TO MONITOR
+
 $BTN_SelectDirectory.Add_Click({
-        SelectDirectory
-    })
-#iF Monitoring DiRECTORY IS CHANGED 
+    SelectDirectory
+})
+
 $TXT_DirPath.Add_TextChanged({
     $FileSystemWatcher.Path = $TXT_DirPath.Text
-        EnableCHB
-        #EnableFileWatcher
-    })
-#CHB_Register Event for Created Item
+    EnableCHB
+})
+
 $CHB_Created.Add_Checked({
-        #
-        #Register-ObjectEvent -InputObject $FileSystemWatcher -SourceIdentifier MonitorCreated -EventName Created -Action {
-        Register-objectEvent $FileSystemWatcher -EventName Created -SourceIdentifier MonitorCreated -Action $ActionOnCreate
-        
+    Register-objectEvent $FileSystemWatcher -EventName Created -SourceIdentifier MonitorCreated -Action $ActionOnCreate
 })
-#UnRegister Event for  Item
 $CHB_Created.Add_UnChecked({
-        #
-        Get-EventSubscriber -SourceIdentifier 'MonitorCreated' | Unregister-Event
-    })  
-#Register Event for Delete Item - CHB_Deleted
+    Get-EventSubscriber -SourceIdentifier 'MonitorCreated' | Unregister-Event
+})  
 $CHB_Deleted.Add_Checked({
-        #
-        #Register-ObjectEvent -InputObject $FileSystemWatcher -SourceIdentifier MonitorDeleted -EventName Deleted -Action {
-
-            Register-objectEvent $FileSystemWatcher -EventName Deleted -SourceIdentifier MonitorDeleted -Action $ActionOnDelete
-        
-        })
-##UnRegister Event 
-$CHB_Deleted.Add_UnChecked({
-        #
-        Get-EventSubscriber -SourceIdentifier 'MonitorDeleted' | Unregister-Event
-    })  
-# Register Event for Changed Item - CHB_Changed
-$CHB_Changed.Add_Checked({
-        #
-        #Register-ObjectEvent -InputObject $FileSystemWatcher -SourceIdentifier MonitorChanged -EventName Changed -Action {
-            Register-objectEvent $FileSystemWatcher -EventName Changed -SourceIdentifier MonitorChanged -Action $ActionOnChange
-
-    })
-##UnRegister Event 
-$CHB_Changed.Add_UnChecked({
-        #
-        Get-EventSubscriber -SourceIdentifier 'MonitorChanged' | Unregister-Event
-    }) 
-# Register Event for Renamed Item - CHB_Renamed 
-$CHB_Renamed.Add_Checked({
-        #
-        #Register-ObjectEvent -InputObject $FileSystemWatcher -SourceIdentifier MonitorRenamed -EventName Renamed -Action {
-            Register-objectEvent $FileSystemWatcher -EventName Renamed -SourceIdentifier MonitorRenamed -Action $ActionOnRename
+    Register-objectEvent $FileSystemWatcher -EventName Deleted -SourceIdentifier MonitorDeleted -Action $ActionOnDelete
 })
-##UnRegister Event 
+$CHB_Deleted.Add_UnChecked({
+    Get-EventSubscriber -SourceIdentifier 'MonitorDeleted' | Unregister-Event
+})  
+$CHB_Changed.Add_Checked({
+    Register-objectEvent $FileSystemWatcher -EventName Changed -SourceIdentifier MonitorChanged -Action $ActionOnChange
+})
+$CHB_Changed.Add_UnChecked({
+    Get-EventSubscriber -SourceIdentifier 'MonitorChanged' | Unregister-Event
+}) 
+$CHB_Renamed.Add_Checked({
+    Register-objectEvent $FileSystemWatcher -EventName Renamed -SourceIdentifier MonitorRenamed -Action $ActionOnRename
+})
 $CHB_Renamed.Add_UnChecked({
-        #
-        Get-EventSubscriber -SourceIdentifier 'MonitorRenamed' | Unregister-Event
-    })
-# Register Event for Disposed Item -  CHB_Disposed
-# $CHB_Disposed.Add_Checked({
-#         #
-#         #Register-ObjectEvent -InputObject $FileSystemWatcher -SourceIdentifier 'MonitorDisposed' -EventName Disposed -Action {
-#             Register-objectEvent $FileSystemWatcher -EventName Disposed -SourceIdentifier MonitorDisposed -Action $action
-
-# })
-# ##UnRegister Event 
-# $CHB_Disposed.Add_UnChecked({
-#         #
-#         Get-EventSubscriber -SourceIdentifier 'MonitorDisposed' | Unregister-Event
-#     })  
+    Get-EventSubscriber -SourceIdentifier 'MonitorRenamed' | Unregister-Event
+})
 
 $CHB_LogFile.Add_Checked({
-        #CreateLog
-    })
-#UnRegister Event for  Item
+    #CreateLog
+})
 $CHB_LogFile.Add_UnChecked({
-        #$File = "$DirMonFullPath\$MonitorLog"
-        #$SetDate = Get-Date -UForma "%y%m%dT%H%M%S"
-        #write-host $File $SetDate
-        # Rename-Item -Path $File -NewName "$DirMonFullPath\$SetDate-$MonitorLog"
-    })  
+    # Optionally handle log file uncheck
+})  
 
 $CHB_MailNotify.Add_Checked({
-    })
-#UnRegister Event for  Item
+    # Optionally handle mail notify check
+})
 $CHB_MailNotify.Add_UnChecked({
-        # 
-    })  
-#UNREGISTER ALL REGISTER EVENTS ON CLOSING.
-$DirectoryMonitor.Add_Closing({
-        # Get-EventSubscriber -SourceIdentifier 'MonitorCreated' | Unregister-Event
-        # Get-EventSubscriber -SourceIdentifier 'MonitorDeleted' | Unregister-Event
-        # Get-EventSubscriber -SourceIdentifier 'MonitorChanged' | Unregister-Event
-        # Get-EventSubscriber -SourceIdentifier 'MonitorRenamed' | Unregister-Event
-        # Get-EventSubscriber -SourceIdentifier 'MonitorDisposed' | Unregister-Event
-        # Get-EventSubscriber -SourceIdentifier 'MonitorError' | Unregister-Event
-        Get-EventSubscriber | Unregister-Event
-        $FileSystemWatcher.Dispose()
-    })
+    # Optionally handle mail notify uncheck
+})  
 
-$DirectoryMonitor.ShowDialog() | out-null   
+$DirectoryMonitor.Add_Closing({
+    Get-EventSubscriber | Unregister-Event
+    $FileSystemWatcher.Dispose()
+})
+
+$DirectoryMonitor.ShowDialog() | Out-Null
